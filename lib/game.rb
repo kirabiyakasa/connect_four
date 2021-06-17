@@ -5,27 +5,42 @@ class Game
     @players = players
     @player_names = [players[0].name, players[1].name]
     @player_colors = [players[0].color, players[1].color]
+
+    @current_player = players[0]
   end
 
   def play_game(game)
     matched_four = false
 
     @players.each do |player|
-      @interface.show_board(@board.columns, @player_names, @player_colors)
-      puts "\n#{player.name}'s turn."
-      move_coords = get_move(game)
-      matched_four = @board.update_board(player.color, move_coords)
-      if matched_four == true
+
+      if player == @current_player
         @interface.show_board(@board.columns, @player_names, @player_colors)
-        @interface.show_victory(player.name, player.color)
-        end_game(@interface, @players)
+        puts "\n#{player.name}'s turn."
+        move_coords = get_move(game)
+        matched_four = @board.update_board(player.color, move_coords)
+        if matched_four == true
+          @interface.show_board(@board.columns, @player_names, @player_colors)
+          @interface.show_victory(player.name, player.color)
+          end_game(@interface, @players)
+        end
+        check_board()
       end
-      check_board()
+      switch_player(player)
     end
     play_game(game)
   end
 
   private
+
+  def switch_player(player)
+    if player == @players[0]
+      @current_player = @players[1]
+    else
+      @current_player = @players[0]
+    end
+  end
+
   def get_move(game)
     input = gets.chomp
     until input == "0" || ("1".."7").include?(input) && 

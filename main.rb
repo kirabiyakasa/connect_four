@@ -8,7 +8,7 @@ def get_input()
   input = gets.chomp
   until input == "1" || input == "2"
     "Please Enter a valid input."
-    answer = gets.chomp
+    input = gets.chomp
   end
   return input
 end
